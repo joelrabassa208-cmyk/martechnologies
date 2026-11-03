@@ -82,6 +82,21 @@
       var r = form.querySelector('input[name="interes"][value="Alianza o inversión"]');
       if (r) r.checked = true;
     }
+    var OFERTAS = {
+      'asistente-whatsapp': 'Asistente de WhatsApp con IA',
+      'turnos': 'Turnos online con recordatorios',
+      'catalogo': 'Catálogo con pedidos online',
+      'sitio-web': 'Sitio web profesional',
+      'cotizador': 'Cotizador automático',
+      'a-medida': 'un proyecto a medida'
+    };
+    var oferta = OFERTAS[params.get('oferta')];
+    if (oferta) {
+      var msg = form.elements.mensaje;
+      if (msg && !msg.value) msg.value = 'Hola, me interesa la oferta de lanzamiento: ' + oferta + '. ';
+      var subj = form.querySelector('input[name="_subject"]');
+      if (subj) subj.value = 'Consulta por oferta: ' + oferta;
+    }
     var rules = {
       nombre: function (v) { return v.trim().length >= 2 ? '' : 'Escribí tu nombre.'; },
       email: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? '' : 'Escribí un correo válido, por ejemplo nombre@empresa.com.'; },
