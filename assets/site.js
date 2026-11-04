@@ -147,4 +147,25 @@
       });
     });
   }
+
+  // Barrido tipo radar: se aplica a toda tarjeta con borde y esquinas redondeadas (cortar el negro de fondo).
+  function beamCards() {
+    var n = 0;
+    document.querySelectorAll('main div, main article, main section, main li, main a, main aside, main figure, main form').forEach(function (el) {
+      if (el.closest('.beam-border') || el.classList.contains('mar-beam')) return;
+      if (/^(A|BUTTON)$/.test(el.tagName) && el.offsetHeight < 120) return;
+      var cs = getComputedStyle(el);
+      var bw = parseFloat(cs.borderTopWidth) || 0, r = parseFloat(cs.borderTopLeftRadius) || 0;
+      if (bw < 0.5 || bw > 3 || r < 12 || cs.borderTopStyle === 'none') return;
+      if (el.offsetWidth < 200 || el.offsetHeight < 110) return;
+      if (getComputedStyle(el, '::before').content !== 'none' || getComputedStyle(el, '::after').content !== 'none') return;
+      if (el.parentElement && el.parentElement.closest('.mar-beam')) return;
+      if (cs.position === 'static') el.style.position = 'relative';
+      el.style.setProperty('--bw', bw + 'px');
+      el.style.setProperty('--bi', cs.overflow === 'visible' ? (-bw) + 'px' : '0px');
+      el.style.setProperty('--beam-delay', (-(n * 0.9) % 4.5).toFixed(1) + 's');
+      el.classList.add('mar-beam'); n++;
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', beamCards); else beamCards();
 })();

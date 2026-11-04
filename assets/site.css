@@ -96,3 +96,8 @@ a{color:#8DB6FF}a:hover{color:#C9DCFF}
 .span2{grid-column:span 2}
 @media (max-width:820px){.span2{grid-column:auto}.flow-side{display:none}.flow-wrap{aspect-ratio:auto!important;height:340px}}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
+/* Barrido tipo radar en todas las tarjetas (se activa desde site.js con .mar-beam) */
+.mar-beam{isolation:isolate}
+.mar-beam::before,.mar-beam::after{content:"";position:absolute;pointer-events:none;border-radius:inherit;animation:ang 4.5s linear infinite;animation-delay:var(--beam-delay,0s)}
+.mar-beam::before{inset:var(--bi,-1px);padding:var(--bw,1px);background:conic-gradient(from var(--ang),transparent 0deg,transparent 240deg,rgba(61,214,245,.85) 300deg,#FFFFFF 325deg,rgba(76,141,255,.9) 340deg,transparent 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);z-index:1}
+.mar-beam::after{inset:0;background:conic-gradient(from var(--ang),transparent 0deg,transparent 250deg,rgba(76,141,255,.10) 300deg,rgba(159,233,255,.16) 325deg,rgba(76,141,255,.08) 345deg,transparent 360deg);z-index:-1}
