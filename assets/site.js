@@ -140,7 +140,7 @@
         }
       }).catch(function () {
         status.className = 'form-status fail';
-        status.innerHTML = 'No pudimos enviar tu consulta. Probá de nuevo o escribinos a <a href="mailto:joelrabassa208@gmail.com">joelrabassa208@gmail.com</a>.';
+        status.innerHTML = 'No pudimos enviar tu consulta. Probá de nuevo o escribinos a <a href="mailto:info@martechnologies.ar">info@martechnologies.ar</a>.';
       }).then(function () {
         submit.disabled = false;
         submit.textContent = 'Enviar consulta →';
