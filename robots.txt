@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /acceso/
 
 Sitemap: https://martechnologies.ar/sitemap.xml
