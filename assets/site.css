@@ -141,3 +141,7 @@ a{color:#8DB6FF}a:hover{color:#C9DCFF}
 .dq-link{color:#8DB6FF;font-size:15px}
 .dq-next[hidden]{display:none}
 @media (max-width:520px){.dq-price span{font-size:24px}.dq-rec{padding:20px}.dq-rec h3{font-size:22px}}
+@media (min-width:1241px){
+  #site-nav{flex-wrap:nowrap!important;gap:16px!important}
+  #site-nav a{white-space:nowrap;font-size:14.5px!important}
+}
