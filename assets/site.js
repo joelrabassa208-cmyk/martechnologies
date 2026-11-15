@@ -185,9 +185,27 @@
   var hero = document.getElementById('inicio');
   var story = document.getElementById('en-accion');
   var phone = story && story.querySelector('.phone');
-  var cards = calm ? [] : Array.prototype.slice.call(document.querySelectorAll('main section:not(#inicio) .xgrid > a, #te-acompanamos [style*="grid-template-columns"] > div, .res-card, main section:not(#inicio) [style*="grid-template-columns"] > a'));
-  if (matchMedia('(max-width:900px)').matches) cards = cards.concat(Array.prototype.slice.call(document.querySelectorAll('.story .step')));
-  cards = cards.filter(function (c, i, a) { return a.indexOf(c) === i; });
+  /* Tarjetas de cualquier página: invisibles abajo, visibles al llegar al centro de la pantalla.
+     Lo que ya se ve al abrir la página queda quieto. */
+  var cards = [];
+  if (!calm) {
+    var cand = document.querySelectorAll('main [style*="grid-template-columns"] > *, main [style*="border-radius"][style*="border: 1px"], main [style*="border-radius"][style*="border:1px"], main .dq-card, main .res-card, main img');
+    var small = matchMedia('(max-width:900px)').matches;
+    var picked = [];
+    for (var j = 0; j < cand.length; j++) {
+      var el = cand[j], r0 = el.getBoundingClientRect();
+      if (el.closest('#inicio') || el.closest('header') || el.closest('.story-stage')) continue;
+      if (r0.height < 56 || r0.width < 120) continue;
+      if (r0.top + scrollY < innerHeight * 0.9) continue;   // ya visible al abrir
+      picked.push(el);
+    }
+    if (small) picked = picked.concat(Array.prototype.slice.call(document.querySelectorAll('.story .step')));
+    cards = picked.filter(function (c, i, a) {   // sin repetidos y solo la tarjeta de afuera
+      if (a.indexOf(c) !== i) return false;
+      for (var q = c.parentElement; q; q = q.parentElement) if (a.indexOf(q) !== -1) return false;
+      return true;
+    });
+  }
   var ticking = false;
   function onScroll() {
     if (ticking) return;
@@ -227,7 +245,11 @@
 
   /* Aparición suave de títulos, textos y tarjetas */
   if (!calm) {
-    var targets = document.querySelectorAll('main section:not(#inicio) h2, main section:not(#inicio) h2 + p, .story-head p');
+    var targets = Array.prototype.filter.call(document.querySelectorAll('main h2, main h2 + p, main h3, .story-head p'), function (el) {
+      if (el.closest('#inicio') || el.closest('.story-stage')) return false;
+      for (var i = 0; i < cards.length; i++) if (cards[i].contains(el)) return false;   // las tarjetas ya tienen su efecto
+      return el.getBoundingClientRect().top + scrollY > innerHeight * 0.9;
+    });
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
