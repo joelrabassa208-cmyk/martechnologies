@@ -185,6 +185,9 @@
   var hero = document.getElementById('inicio');
   var story = document.getElementById('en-accion');
   var phone = story && story.querySelector('.phone');
+  var cards = calm ? [] : Array.prototype.slice.call(document.querySelectorAll('main section:not(#inicio) .xgrid > a, #te-acompanamos [style*="grid-template-columns"] > div, .res-card, main section:not(#inicio) [style*="grid-template-columns"] > a'));
+  if (matchMedia('(max-width:900px)').matches) cards = cards.concat(Array.prototype.slice.call(document.querySelectorAll('.story .step')));
+  cards = cards.filter(function (c, i, a) { return a.indexOf(c) === i; });
   var ticking = false;
   function onScroll() {
     if (ticking) return;
@@ -198,6 +201,14 @@
         var h = Math.min(1, scrollY / (hero.offsetHeight || 1));
         hero.style.setProperty('--hy', (h * 120).toFixed(1));
         hero.style.setProperty('--hs', (h * 0.12).toFixed(3));
+      }
+      for (var i = 0; i < cards.length; i++) {   // tarjetas: invisibles abajo, visibles al llegar al centro
+        var c = cards[i], top = c.getBoundingClientRect().top;
+        var k = Math.max(0, Math.min(1, (innerHeight - top) / (innerHeight * 0.5)));
+        if (c._k === k) continue;
+        c._k = k;
+        c.style.opacity = k.toFixed(3);
+        c.style.translate = '0 ' + ((1 - k) * 48).toFixed(1) + 'px';
       }
       if (phone) {  // el celular gira a medida que avanzás por la historia
         var r = story.getBoundingClientRect();
@@ -216,7 +227,7 @@
 
   /* Aparición suave de títulos, textos y tarjetas */
   if (!calm) {
-    var targets = document.querySelectorAll('main section:not(#inicio) h2, main section:not(#inicio) h2 + p, main section:not(#inicio) .xgrid > a, #te-acompanamos [style*="grid-template-columns"] > div, .res-card, .story-head p');
+    var targets = document.querySelectorAll('main section:not(#inicio) h2, main section:not(#inicio) h2 + p, .story-head p');
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
