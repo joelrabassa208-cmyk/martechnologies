@@ -169,3 +169,99 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', beamCards); else beamCards();
 })();
+
+/* ---------- Scroll y animación (2026-11) ---------- */
+(function () {
+  'use strict';
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root = document.documentElement;
+
+  /* Barra de progreso de lectura */
+  var bar = document.createElement('div');
+  bar.className = 'scroll-bar';
+  bar.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(bar);
+
+  var hero = document.getElementById('inicio');
+  var story = document.getElementById('en-accion');
+  var phone = story && story.querySelector('.phone');
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      var max = root.scrollHeight - innerHeight;
+      bar.style.setProperty('--p', max > 0 ? (scrollY / max).toFixed(4) : 0);
+      if (calm) return;
+      if (hero) {   // el núcleo del inicio se aleja suave al bajar
+        var h = Math.min(1, scrollY / (hero.offsetHeight || 1));
+        hero.style.setProperty('--hy', (h * 120).toFixed(1));
+        hero.style.setProperty('--hs', (h * 0.12).toFixed(3));
+      }
+      if (phone) {  // el celular gira a medida que avanzás por la historia
+        var r = story.getBoundingClientRect();
+        var t = Math.max(0, Math.min(1, (innerHeight - r.top) / (r.height + innerHeight)));
+        phone.style.setProperty('--ry', (-22 + t * 40).toFixed(1) + 'deg');
+        phone.style.setProperty('--rx', (10 - t * 14).toFixed(1) + 'deg');
+        phone.style.setProperty('--rz', (3 - t * 6).toFixed(1) + 'deg');
+      }
+    });
+  }
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll);
+  onScroll();
+
+  if (!('IntersectionObserver' in window)) return;
+
+  /* Aparición suave de títulos, textos y tarjetas */
+  if (!calm) {
+    var targets = document.querySelectorAll('main section:not(#inicio) h2, main section:not(#inicio) h2 + p, main section:not(#inicio) .xgrid > a, #te-acompanamos [style*="grid-template-columns"] > div, .res-card, .story-head p');
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -10% 0px' });
+    targets.forEach(function (el, i) {
+      var sib = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
+      el.style.setProperty('--d', (Math.min(sib, 5) * 0.08) + 's');
+      el.classList.add('rv');
+      io.observe(el);
+    });
+  }
+
+  /* Historia: cada paso cambia la pantalla del celular */
+  if (story) {
+    var shots = story.querySelectorAll('.shot');
+    var steps = story.querySelectorAll('.step');
+    var so = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var k = e.target.getAttribute('data-shot');
+        story.setAttribute('data-shot', k);
+        steps.forEach(function (s) { s.classList.toggle('on', s === e.target); });
+        shots.forEach(function (s, i) { s.classList.toggle('on', String(i) === k); });
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    steps.forEach(function (s) { so.observe(s); });
+    story.setAttribute('data-shot', '0');
+  }
+
+  /* Números que cuentan hasta su valor */
+  var co = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      co.unobserve(e.target);
+      var end = +e.target.getAttribute('data-count');
+      if (calm) { e.target.textContent = end; return; }
+      var t0 = 0, from = end === 4 ? 0 : 60;   // las 4 h suben; los 3 min bajan desde 60
+      (function tick(ts) {
+        if (!t0) t0 = ts;
+        var k = Math.min(1, (ts - t0) / 1400), ease = 1 - Math.pow(1 - k, 3);
+        e.target.textContent = Math.round(from + (end - from) * ease);
+        if (k < 1) requestAnimationFrame(tick);
+      })(performance.now());
+    });
+  }, { threshold: 0.6 });
+  document.querySelectorAll('[data-count]').forEach(function (n) { co.observe(n); });
+})();
