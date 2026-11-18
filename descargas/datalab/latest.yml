@@ -1,0 +1,8 @@
+version: 1.0.0
+files:
+  - url: DataLab-Setup.exe
+    sha512: IIMx3C0IoMR+eTdlYtwlBebGBgg1u6uBSa18hvnu9UCFw4k3CcuLUOtKNcdgkOFigCEPWR1NUajZSAJlTWn/YA==
+    size: 83069257
+path: DataLab-Setup.exe
+sha512: IIMx3C0IoMR+eTdlYtwlBebGBgg1u6uBSa18hvnu9UCFw4k3CcuLUOtKNcdgkOFigCEPWR1NUajZSAJlTWn/YA==
+releaseDate: '2026-11-18T13:46:28.246Z'
