@@ -15,7 +15,8 @@ img{max-width:100%}
   #site-nav>a:last-child{justify-content:center;margin-top:10px}
   .nav-dd-btn{width:100%;justify-content:space-between;padding:12px 0!important;font-size:17px!important}
   .nav-dd-menu{position:static!important;display:none;opacity:1!important;transform:none!important;visibility:visible!important;min-width:0!important;background:none!important;border:0!important;box-shadow:none!important;padding:0 0 6px 14px!important;margin:0!important;border-left:1px solid rgba(198,207,220,.18)!important;border-radius:0!important}
-  .nav-dd.open .nav-dd-menu{display:flex}
+  #site-nav .nav-dd-menu{display:none}
+  #site-nav .nav-dd.open .nav-dd-menu{display:flex}
   #site-nav .nav-dd-menu a{padding:9px 0!important;font-size:16px!important}
 }
 .demo-panel[hidden]{display:none!important}
