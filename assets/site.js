@@ -26,6 +26,15 @@
     });
   }
 
+  /* Menú «Software» */
+  Array.prototype.forEach.call(document.querySelectorAll('.nav-dd'), function (dd) {
+    var b = dd.querySelector('.nav-dd-btn');
+    var set = function (open) { dd.classList.toggle('open', open); b.setAttribute('aria-expanded', String(open)); };
+    b.addEventListener('click', function (e) { e.stopPropagation(); set(!dd.classList.contains('open')); });
+    document.addEventListener('click', function (e) { if (!dd.contains(e.target)) set(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && dd.classList.contains('open')) { set(false); b.focus(); } });
+  });
+
   /* Brillo y núcleo 3D que siguen al mouse */
   if (fine && !calm) {
     document.querySelectorAll('[data-spot]').forEach(function (el) {

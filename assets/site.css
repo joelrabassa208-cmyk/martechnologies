@@ -10,9 +10,13 @@ img{max-width:100%}
 @media (max-width:1240px){
   .menu-btn{display:inline-flex}
   #site-nav{display:none!important;position:absolute;top:72px;left:0;right:0;flex-direction:column;align-items:stretch!important;gap:4px!important;background:rgba(5,7,12,.97);backdrop-filter:blur(14px);padding:12px 20px 24px;border-bottom:1px solid rgba(198,207,220,.12)}
-  #site-nav.open{display:flex!important}
+  #site-nav.open{display:flex!important;background:#05070C!important;max-height:calc(100vh - 72px);overflow-y:auto}
   #site-nav a{padding:12px 0!important;font-size:17px!important}
-  #site-nav a:last-child{justify-content:center;margin-top:10px}
+  #site-nav>a:last-child{justify-content:center;margin-top:10px}
+  .nav-dd-btn{width:100%;justify-content:space-between;padding:12px 0!important;font-size:17px!important}
+  .nav-dd-menu{position:static!important;display:none;opacity:1!important;transform:none!important;visibility:visible!important;min-width:0!important;background:none!important;border:0!important;box-shadow:none!important;padding:0 0 6px 14px!important;margin:0!important;border-left:1px solid rgba(198,207,220,.18)!important;border-radius:0!important}
+  .nav-dd.open .nav-dd-menu{display:flex}
+  #site-nav .nav-dd-menu a{padding:9px 0!important;font-size:16px!important}
 }
 .demo-panel[hidden]{display:none!important}
 .radio-pill{display:flex;align-items:center;gap:10px;border:1px solid #2B3850;border-radius:12px;padding:10px 16px;min-height:44px;font-size:15px;cursor:pointer}
@@ -197,3 +201,17 @@ a{color:#8DB6FF}a:hover{color:#C9DCFF}
   .phone,.shot,.chip{transition:none}
   #inicio .flow-wrap{transform:none}
 }
+
+/* Menú «Software»: agrupa los productos */
+.nav-dd{position:relative}
+.nav-dd-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:#C6CFDC;font:inherit;font-size:15px;padding:10px 0;cursor:pointer;min-height:44px}
+.nav-dd-btn svg{transition:transform .2s}
+.nav-dd.open .nav-dd-btn svg{transform:rotate(180deg)}
+.nav-dd-btn:hover,.nav-dd.cur .nav-dd-btn{color:#F4F7FB}
+.nav-dd-menu{position:absolute;left:-14px;top:100%;z-index:30;min-width:260px;display:flex;flex-direction:column;gap:2px;padding:8px;background:rgba(10,14,22,.98);border:1px solid rgba(198,207,220,.14);border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .15s,transform .15s,visibility .15s}
+.nav-dd.open .nav-dd-menu{opacity:1;visibility:visible;transform:none}
+@media (hover:hover) and (min-width:1241px){.nav-dd:hover .nav-dd-menu,.nav-dd:focus-within .nav-dd-menu{opacity:1;visibility:visible;transform:none}}
+.nav-dd-menu a{display:flex;flex-direction:column;gap:1px;padding:10px 12px;border-radius:10px;color:#F4F7FB;text-decoration:none;font-size:15px;font-weight:500}
+.nav-dd-menu a span{font-size:12.5px;font-weight:400;color:#8D99AB}
+.nav-dd-menu a:hover,.nav-dd-menu a:focus-visible{background:rgba(76,141,255,.12)}
+.nav-dd-menu a[aria-current="page"]{background:rgba(76,141,255,.14)}
